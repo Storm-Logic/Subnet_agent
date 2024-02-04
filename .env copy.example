@@ -1,0 +1,47 @@
+# Discord
+DISCORD_TOKEN=your_discord_bot_token
+ALLOWED_CHANNEL_IDS=123456789,987654321
+ANNOUNCEMENT_CHANNEL_IDS=123456789
+ANNOUNCEMENT_POLL_INTERVAL=15
+TOP_MINER_ALERT_CHANNEL_IDS=123456789
+TOP_MINER_ALERTS_ENABLED=true
+TOP_MINER_ALERT_MENTION_EVERYONE=true
+TOP_MINER_STARTUP_ALERT_ENABLED=true
+
+# Codex CLI
+# Install/login separately with Codex CLI before running the bot.
+CODEX_COMMAND=codex
+CODEX_MODEL=
+CODEX_CREATIVE_MODEL=
+CODEX_TIMEOUT=120
+CODEX_SANDBOX=read-only
+CODEX_APPROVAL_POLICY=never
+CODEX_WEB_SEARCH=live
+CODEX_BROWSE_ALL_REFERENCE_URLS=true
+
+# Bittensor
+NETUID=1
+SUBTENSOR_NETWORK=finney
+CHAIN_POLL_INTERVAL=300
+
+# wandb — only entity + project needed, run IDs are auto-discovered
+WANDB_API_KEY=your_wandb_api_key
+WANDB_ENTITY=perturb-ai
+WANDB_PROJECT=perturb-validator
+WANDB_POLL_INTERVAL=120       # seconds between polls
+WANDB_TARGET_RECORDS=100      # collect runs until we have ~100 records total
+WANDB_MAX_RUNS=10             # never fetch more than 10 runs per cycle
+WANDB_API_TIMEOUT=60          # wandb graphql timeout seconds
+
+# GitHub docs
+GITHUB_REPO=0xsigurd/Perturb
+GITHUB_TOKEN=
+DOCS_PATHS=README.md,docs/
+
+# Admin UI
+ADMIN_UI_TOKEN=set_a_strong_token_here
+ADMIN_PORT=8888
+
+# Webhook (optional)
+WEBHOOK_SECRET=your_github_webhook_secret
+WEBHOOK_PORT=8080
