@@ -1,0 +1,333 @@
+[
+  {
+    "id": "btcore01",
+    "question": "what is bittensor current bittensor overview tao subtensor subnet miners validators",
+    "answer": "As of 2026-06-02, Bittensor is a decentralized incentive network for AI and digital services. Its L1 blockchain is Subtensor, its main token is TAO, and its markets are subnets. Each subnet is an incentive-based competition marketplace where miners produce a specific commodity or service and validators evaluate miner work. Validator scores, stake, subnet economics, and Yuma Consensus determine how emissions are distributed.",
+    "tags": [
+      "bittensor",
+      "tao",
+      "subtensor",
+      "subnet"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "btsubnet01",
+    "question": "what is a subnet in bittensor miners validators netuid uid alpha token dynamic tao",
+    "answer": "A Bittensor subnet is an independent market with its own task, incentive mechanism, miners, validators, and subnet-specific alpha token. The subnet creator defines the off-chain rules and code. Miners perform the useful work, validators score that work, and the chain uses those scores to allocate rewards. A netuid identifies the subnet, and a UID identifies a registered participant slot inside that subnet.",
+    "tags": [
+      "bittensor",
+      "subnet",
+      "miners",
+      "validators",
+      "alpha"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "btecon01",
+    "question": "how do bittensor emissions work current taoflow dynamic tao alpha staking liquidity pools",
+    "answer": "Current Bittensor emissions have two levels: allocation across subnets and distribution inside each subnet. Since the November 2025 Taoflow transition, subnet-level emissions are based on net TAO inflows from staking activity rather than only token price. Inside a subnet, emissions are distributed to the subnet owner, miners, validators, and validator stakers. Each subnet has an AMM-style TAO/alpha pool, and the alpha price is based on the reserve ratio.",
+    "tags": [
+      "bittensor",
+      "emissions",
+      "taoflow",
+      "dynamic-tao",
+      "alpha"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "yuma01",
+    "question": "what is yuma consensus yc bittensor algorithm miners validators emissions",
+    "answer": "Yuma Consensus is the on-chain Bittensor algorithm that converts validators' miner rankings into miner and validator emissions. Validators periodically submit weight vectors ranking miners. Yuma uses validator stake and the weight matrix to determine which miner scores count, how miner rewards are allocated, and how validator rewards are earned for useful, timely, consensus-aligned evaluation.",
+    "tags": [
+      "bittensor",
+      "yuma",
+      "consensus",
+      "validators",
+      "miners"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "yuma02",
+    "question": "how does yuma consensus clipping work kappa stake weights collusion over evaluation",
+    "answer": "Yuma Consensus protects against over-scoring and collusion through clipping. For each miner, validator weights are compared against a stake-weighted consensus benchmark. If a validator gives a miner a score above the level supported by enough validator stake, the excess is clipped and does not earn emissions. This makes it harder for a validator-miner group to inflate rewards unless enough trusted stake agrees.",
+    "tags": [
+      "bittensor",
+      "yuma",
+      "clipping",
+      "kappa",
+      "collusion"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "yuma03",
+    "question": "what is yuma consensus 3 yc3 liquid alpha bonds ema validator fairness",
+    "answer": "Yuma Consensus 3, or YC3, is the newer Yuma mechanism version designed to improve validator fairness, bond mechanics, and precision. Its key change is per-bond EMA scaling: each validator-miner bond pair can adjust at its own rate instead of using one global adjustment rate. YC3 helps reward validators that independently identify strong miners early while reducing unfair precision and scaling issues for smaller validators.",
+    "tags": [
+      "bittensor",
+      "yuma",
+      "yc3",
+      "liquid-alpha",
+      "bonds"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "btroles01",
+    "question": "what are miners validators stakers subnet owners bittensor roles",
+    "answer": "Bittensor roles are: miners, who provide the subnet's useful work; validators, who evaluate miners and submit weights; stakers, who delegate TAO or alpha to validators/subnets and share rewards; and subnet owners, who create and maintain subnet incentive mechanisms. The system tries to reward useful production, honest evaluation, and capital allocation toward valuable subnets.",
+    "tags": [
+      "bittensor",
+      "miners",
+      "validators",
+      "stakers",
+      "subnet-owner"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "install01",
+    "question": "real problems miner validator install setup environment troubleshooting bittensor perturb",
+    "answer": "For miner or validator installation problems, first identify whether the failure is chain setup, wallet/registration, Python dependency, GPU/CUDA, network/firewall, or subnet-specific code. Generic Bittensor knowledge is not enough: the user should provide the exact command, full error text, OS, Python version, btcli/bittensor version, netuid, wallet name, hotkey name, and whether they are running miner or validator. Do not guess a fix when the error points to a missing registration, wrong network, missing permit, package conflict, or CUDA/runtime problem.",
+    "tags": [
+      "install",
+      "setup",
+      "troubleshooting",
+      "miner",
+      "validator",
+      "environment"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "install02",
+    "question": "btcli not found command not found install path pipx venv python bittensor",
+    "answer": "If `btcli` is not found, the CLI is not installed in the active environment or its scripts directory is not on PATH. Check `python --version`, `which python`, `which pip`, `pip show bittensor-cli bittensor`, and `which btcli`. If using a venv, activate it before installing and before running commands. If using pipx, confirm the pipx bin directory is on PATH. Avoid mixing system Python, conda, venv, and pipx in one setup.",
+    "tags": [
+      "btcli",
+      "install",
+      "path",
+      "venv",
+      "pipx",
+      "python"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "install03",
+    "question": "wrong python version dependency conflict package install fails bittensor miner validator",
+    "answer": "Python/package failures usually come from using the wrong Python version, installing outside the active venv, or mixing old Bittensor SDK/CLI packages with new subnet code. Use a clean virtual environment, confirm the project-required Python version from the subnet README, then install dependencies from the subnet's requirements or pyproject. If errors mention removed calls or missing methods, update the Bittensor SDK/CLI or pin the version required by the subnet.",
+    "tags": [
+      "python",
+      "dependencies",
+      "venv",
+      "bittensor",
+      "sdk",
+      "requirements"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "wallet01",
+    "question": "wallet coldkey hotkey missing wrong wallet name hotkey path not found miner validator",
+    "answer": "Wallet errors usually mean the process is using a different wallet path, wallet name, or hotkey name than the one that was created or registered. Check `btcli wallet list`, confirm the wallet path, and make sure the miner or validator command uses the exact `--wallet.name` and `--wallet.hotkey` values. Do not expose the mnemonic or private key in Discord; only share public hotkey/coldkey addresses and command output with secrets removed.",
+    "tags": [
+      "wallet",
+      "coldkey",
+      "hotkey",
+      "path",
+      "registration"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "register01",
+    "question": "not registered uid missing register subnet miner validator hotkey netuid network finney test",
+    "answer": "If a miner or validator says the wallet/hotkey is not registered, the hotkey does not have a UID on that netuid and network. Confirm the correct network (`finney` for mainnet or `test`/local where appropriate), check the netuid, and inspect registration with `btcli wallet overview --netuid <netuid>` or subnet display commands. Registering costs TAO on mainnet, and the burn price changes dynamically.",
+    "tags": [
+      "registration",
+      "uid",
+      "netuid",
+      "hotkey",
+      "finney",
+      "miner",
+      "validator"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "register02",
+    "question": "insufficient balance current recycle burn tao register neuron miner validator",
+    "answer": "An insufficient balance or recycle/burn error means the coldkey signing the registration does not have enough TAO to pay the current registration cost and fees. Check the current registration cost for the subnet before registering, ensure the coldkey has enough free balance, and remember that mainnet registration burn is spent and cannot be recovered.",
+    "tags": [
+      "registration",
+      "burn",
+      "tao",
+      "balance",
+      "recycle",
+      "fees"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "register03",
+    "question": "priority too low duplicate transaction btcli transaction pool error",
+    "answer": "`Priority is too low` usually means a duplicate or too-fast repeated transaction is already in the transaction pool. Wait a few minutes and retry once. Do not keep spamming the same registration, transfer, stake, or set-weights command; that can keep creating duplicate transaction conflicts.",
+    "tags": [
+      "btcli",
+      "transaction",
+      "priority",
+      "duplicate",
+      "pool"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "validator01",
+    "question": "NeuronNoValidatorPermit validator permit cannot set weights not permitted validator stake",
+    "answer": "`NeuronNoValidatorPermit` means the hotkey is trying to set non-self weights without a validator permit. Confirm the hotkey is registered on the subnet, stake enough TAO/alpha as required for validator status, and wait until the subnet tempo updates. A registered UID alone does not guarantee validator permit or weight-setting permission.",
+    "tags": [
+      "validator",
+      "permit",
+      "set_weights",
+      "stake",
+      "NeuronNoValidatorPermit"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "validator02",
+    "question": "WeightVecLengthIsLow failed set weights validator all miners unresponsive zero weights",
+    "answer": "`WeightVecLengthIsLow` means the validator is trying to submit too few weights. A common cause is that all or most miners are unresponsive, so the validator builds an empty or too-small weight vector. Check miner discovery, dendrite/axon connectivity, network/firewall access, timeout settings, and whether the subnet has active responsive miners.",
+    "tags": [
+      "validator",
+      "weights",
+      "WeightVecLengthIsLow",
+      "miners",
+      "unresponsive"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "validator03",
+    "question": "validator not earning no emissions no incentive low rank copied weights late weights",
+    "answer": "A validator can run without earning much if it has no permit, too little stake influence, late or failed weight submissions, poor miner evaluation, copied/consensus-lagging weights, or a subnet with low emissions. Check logs for set-weights success, inspect validator permit/stake, confirm the validator completes evaluation before tempo deadlines, and compare its ranking/emissions on-chain.",
+    "tags": [
+      "validator",
+      "emissions",
+      "weights",
+      "rank",
+      "permit",
+      "tempo"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "miner01",
+    "question": "miner running no tasks no queries validators not querying no emissions",
+    "answer": "If a miner runs but receives no validator queries, check that it is registered on the correct netuid/network, advertises a reachable axon/IP/port, has open firewall/security-group rules, matches the subnet protocol/version, and passes any readiness or health checks. Also check whether the subnet has active validators and whether the miner has exited immunity without earning enough emissions.",
+    "tags": [
+      "miner",
+      "queries",
+      "axon",
+      "firewall",
+      "emissions",
+      "readiness"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "miner02",
+    "question": "axon port ip external ip firewall connection refused timeout miner validator cannot reach",
+    "answer": "Connection refused, timeout, or no inbound miner traffic often means the miner advertises the wrong external IP/port or the port is blocked by firewall, NAT, cloud security group, Docker, or local binding. Verify the miner binds to the expected host/port, the advertised axon address is public/reachable when required, and the cloud firewall allows inbound traffic from validators.",
+    "tags": [
+      "miner",
+      "axon",
+      "port",
+      "ip",
+      "firewall",
+      "timeout",
+      "docker"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "gpu01",
+    "question": "cuda gpu torch not available out of memory driver nvidia miner install",
+    "answer": "GPU/CUDA errors are environment problems, not chain problems. Check `nvidia-smi`, driver version, CUDA runtime compatibility, the installed PyTorch CUDA build, available VRAM, and whether the process is inside Docker/venv with GPU access. If `torch.cuda.is_available()` is false, reinstall the correct PyTorch build or fix NVIDIA driver/container runtime before debugging subnet logic.",
+    "tags": [
+      "cuda",
+      "gpu",
+      "torch",
+      "nvidia",
+      "vram",
+      "miner"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "network01",
+    "question": "subtensor connection timeout genesis mismatch ssl certificate verification websocket finney",
+    "answer": "Subtensor connection errors can be RPC/network issues rather than wallet or subnet failures. For SSL certificate errors on macOS, update/install system certificates for the active Python. `Genesis mismatch` logs are often harmless if the node continues syncing. For websocket timeouts, retry another endpoint/network, check internet/firewall, and confirm the command is using the intended network.",
+    "tags": [
+      "subtensor",
+      "rpc",
+      "ssl",
+      "genesis",
+      "websocket",
+      "network"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "wandb01",
+    "question": "wandb login api key permission project entity validator logs scores not found",
+    "answer": "WandB errors usually come from a missing/invalid API key, wrong entity/project, private project permissions, or a validator run that logs fields under different names than expected. Confirm `WANDB_API_KEY`, `WANDB_ENTITY`, and `WANDB_PROJECT`, test `wandb login`, and check whether the run logs contain UID/score fields or validator console messages that the extractor can parse.",
+    "tags": [
+      "wandb",
+      "api-key",
+      "validator",
+      "logs",
+      "scores"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "env01",
+    "question": ".env environment variable missing wrong netuid wrong network discord bot miner validator",
+    "answer": "Wrong `.env` values can make a working install look broken. Confirm the active process is loading the intended `.env`, then verify netuid, network, wallet names, hotkey, ports, API keys, model keys, and repo paths. After changing `.env`, restart the process; most Python services load environment variables only at startup.",
+    "tags": [
+      "env",
+      "configuration",
+      "netuid",
+      "network",
+      "restart"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "diagnose01",
+    "question": "what information should user provide to debug miner validator install problem",
+    "answer": "Ask for: exact command run, full error text, OS/version, Python version, whether venv/conda/docker is used, btcli and bittensor versions, netuid/network, wallet name and hotkey name, whether the hotkey is registered, whether the role is miner or validator, relevant last 50 log lines, and any GPU/CUDA output if the subnet uses GPU. Never ask for seed phrases, private keys, Discord tokens, WandB keys, or API secrets.",
+    "tags": [
+      "diagnostic",
+      "troubleshooting",
+      "install",
+      "miner",
+      "validator",
+      "security"
+    ],
+    "added": "2026-06-02T00:00:00"
+  },
+  {
+    "id": "8b5dfedf",
+    "question": "The team is self-mining?",
+    "answer": "Nope, Perturb isn't self-mining. It's all transparent, and everything's been going according to the Git repo, just like they said.",
+    "tags": [],
+    "added": "2026-06-02T03:07:58.137504"
+  }
+]
