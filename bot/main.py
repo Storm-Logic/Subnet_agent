@@ -48,6 +48,8 @@ def _start_admin_ui():
 
 
 async def main():
+    poller = None
+
     # 1. WandB poller
     if WANDB_ENTITY and WANDB_PROJECT:
         poller = WandBPoller(
@@ -67,9 +69,16 @@ async def main():
     logger.info(f"Admin UI running on http://0.0.0.0:{ADMIN_PORT}")
 
     # 3. Discord bot
-    async with bot:
-        await bot.start(DISCORD_TOKEN)
+    try:
+        async with bot:
+            await bot.start(DISCORD_TOKEN)
+    finally:
+        if poller:
+            poller.stop()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info("Shutdown requested; bot stopped.")
