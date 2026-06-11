@@ -18,7 +18,6 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Deque
 
 import wandb
-from wandb_gql import gql
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +35,7 @@ LINE_TS_RE = re.compile(r"^(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})")
 
 # ── GQL query for paginated log lines ────────────────────────────────────────
 
-RUN_LOG_LINES_QUERY = gql("""
+RUN_LOG_LINES_QUERY = """
 query RunLogLines(
   $entity: String!,
   $project: String!,
@@ -59,7 +58,7 @@ query RunLogLines(
     }
   }
 }
-""")
+"""
 
 
 # ── Type aliases ──────────────────────────────────────────────────────────────
@@ -137,9 +136,9 @@ def _fetch_from_log_lines(run: wandb.apis.public.Run, page_size: int = 500) -> S
 
     while True:
         try:
-            resp = run.client.execute(
+            resp = run._service_api.execute_graphql(
                 RUN_LOG_LINES_QUERY,
-                variable_values={
+                variables={
                     "entity": run.entity,
                     "project": run.project,
                     "name": run.id,

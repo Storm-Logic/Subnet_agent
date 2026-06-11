@@ -11,7 +11,6 @@ import asyncio
 import glob
 import logging
 import os
-import random
 import re
 import shutil
 import tempfile
@@ -47,11 +46,14 @@ def _resolve_codex_command() -> str:
     if found:
         return found
 
-    for candidate in glob.glob(
-        os.path.expanduser("~/.vscode/extensions/openai.chatgpt-*/bin/*/codex")
-    ):
-        if os.path.exists(candidate) and os.access(candidate, os.X_OK):
-            return candidate
+    extension_patterns = (
+        "~/.vscode/extensions/openai.chatgpt-*/bin/*/codex",
+        "~/.vscode-server/extensions/openai.chatgpt-*/bin/*/codex",
+    )
+    for pattern in extension_patterns:
+        for candidate in sorted(glob.glob(os.path.expanduser(pattern)), reverse=True):
+            if os.path.exists(candidate) and os.access(candidate, os.X_OK):
+                return candidate
 
     return configured
 
@@ -74,7 +76,8 @@ Rules:
 - Treat browsed page contents as supporting context, but say so if a page cannot be accessed or does not contain the answer.
 - Do not stop at "I don't know" or "I don't have that information." If exact facts are missing, reason from general knowledge and reliable context, then give practical next steps or one concise clarifying question.
 - Be kind, patient, and polite. Use friendly wording, especially when correcting mistakes or asking for missing details.
-- Start every answer with a short, natural greeting such as "Hi!" before giving the answer.
+- Choose an opening that fits the user's message. A greeting, acknowledgment, direct answer, or continuation may all be appropriate.
+- Vary greetings naturally when you use them, and do not greet on every message, especially in reply threads or direct technical follow-ups.
 - Use a warm, lightly informal, conversational tone. Prefer everyday wording like "you'll want to", "looks like", "that means", and "I'd check" over formal support language.
 - Acknowledge the user's concern naturally when appropriate, but do not add praise, filler, or canned sympathy.
 - Keep slang minimal and do not become overly casual, jokey, or unprofessional.
@@ -112,7 +115,8 @@ Rules:
 - Treat browsed page contents as supporting context, but say so if a page cannot be accessed or does not contain the answer.
 - Keep answers short and clear: usually 2-5 sentences.
 - Be kind, patient, and polite. Use friendly wording, especially when correcting mistakes or asking for missing details.
-- Start every answer with a short, natural greeting such as "Hi!" before giving the answer.
+- Choose an opening that fits the user's tone and question. Use greetings, acknowledgments, or direct openings naturally rather than following a fixed pattern.
+- Do not greet on every message, especially when continuing a reply thread.
 - Use a warm, lightly informal, conversational tone. Prefer everyday wording like "you'll want to", "looks like", "that means", and "I'd check" over formal support language.
 - Acknowledge the user's concern naturally when appropriate, but do not add praise, filler, or canned sympathy.
 - Keep slang minimal and do not become overly casual, jokey, or unprofessional.
@@ -141,7 +145,7 @@ Do not use canned assistant openers like "Certainly", "Sure", "Great question", 
 Sound natural and friendly, like a helpful teammate replying in Discord.
 Keep the tone warm, lightly informal, and conversational, without heavy slang.
 Avoid fixed templates and respond naturally to the user's wording. Do not pretend to be human or invent personal experiences.
-Start the answer with a short greeting.
+Choose a natural opening for the specific message; a greeting is optional and should not be repetitive.
 Keep the answer connected to this Perturb subnet unless the user clearly asks for another subnet or general-only information.
 For ambiguous operational questions, default to the miner's perspective unless the user names another role.
 Answer every part of the question. Include relevant exact values and briefly explain their practical meaning when available.
@@ -194,6 +198,7 @@ def _build_prompt(
     chain_data,
     wandb_data,
     docs_context,
+    reply_context,
     qa_context,
     information_context,
     announcements_block,
@@ -214,6 +219,12 @@ def _build_prompt(
     if announcements_block: parts.append(f"ANNOUNCEMENTS:\n{announcements_block}")
     if docs_context: parts.append(f"DOCS CONTEXT:\n{docs_context}")
     if links_block:  parts.append(f"REFERENCE LINKS:\n{links_block}")
+    if reply_context:
+        parts.append(
+            "REPLIED BOT MESSAGE:\n"
+            "The user is replying to this previous bot answer. Use it as conversation context:\n"
+            f"{reply_context}"
+        )
     parts.append(f"USER QUESTION:\n{query}")
     return "\n\n---\n\n".join(parts)
 
@@ -307,12 +318,6 @@ def _polish_answer(answer: str) -> str:
     polished = re.sub(r"\n{3,}", "\n\n", polished)
     if polished and polished[0].islower():
         polished = polished[0].upper() + polished[1:]
-    if polished and not re.match(
-        r"^(hi|hello|hey|good morning|good afternoon|good evening)\b",
-        polished,
-        flags=re.IGNORECASE,
-    ):
-        polished = f"{random.choice(('Hi!', 'Hello!', 'Hey!'))} {polished}"
     return polished.strip()
 
 
@@ -365,6 +370,7 @@ async def ask_codex(
     chain_data: str = "",
     wandb_data: str = "",
     docs_context: str = "",
+    reply_context: str = "",
 ) -> str:
     model_key = route_query(query)
     model = CODEX_CREATIVE_MODEL if model_key == "creative" else CODEX_MODEL
@@ -380,6 +386,7 @@ async def ask_codex(
         chain_data,
         wandb_data,
         docs_context,
+        reply_context,
         qa_context,
         information_context,
         announcements_block,

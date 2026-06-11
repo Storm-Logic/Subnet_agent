@@ -264,9 +264,10 @@ class DiscordChatClient(discord.Client):
         if not self._channel_allowed(message):
             return
 
-        should_answer, is_reply = await self._should_answer(message)
+        should_answer, replied_message = await self._should_answer(message)
         if not should_answer:
             return
+        is_reply = replied_message is not None
 
         query = _strip_bot_mentions(message.content, self.user)
         if not query:
@@ -282,7 +283,8 @@ class DiscordChatClient(discord.Client):
         )
 
         async with message.channel.typing():
-            answer = await self._answer(query)
+            reply_context = replied_message.content if replied_message else ""
+            answer = await self._answer(query, reply_context)
 
         await self._reply(message, answer)
 
@@ -291,29 +293,39 @@ class DiscordChatClient(discord.Client):
             return True
         return not ALLOWED_CHANNEL_IDS or message.channel.id in ALLOWED_CHANNEL_IDS
 
-    async def _should_answer(self, message: discord.Message) -> tuple[bool, bool]:
+    async def _should_answer(
+        self,
+        message: discord.Message,
+    ) -> tuple[bool, discord.Message | None]:
+        replied_message = await self._get_replied_bot_message(message)
         if isinstance(message.channel, discord.DMChannel):
-            return True, False
+            return True, replied_message
 
         is_mention = self.user in message.mentions if self.user else False
-        is_reply = await self._is_reply_to_bot(message)
-        return is_mention or is_reply, is_reply
+        return is_mention or replied_message is not None, replied_message
 
-    async def _is_reply_to_bot(self, message: discord.Message) -> bool:
+    async def _get_replied_bot_message(
+        self,
+        message: discord.Message,
+    ) -> discord.Message | None:
         if not message.reference or not message.reference.message_id:
-            return False
+            return None
 
         resolved = message.reference.resolved
         if isinstance(resolved, discord.Message):
-            return bool(self.user and resolved.author.id == self.user.id)
+            if self.user and resolved.author.id == self.user.id:
+                return resolved
+            return None
 
         try:
             replied = await message.channel.fetch_message(message.reference.message_id)
         except (discord.NotFound, discord.Forbidden, discord.HTTPException):
-            return False
-        return bool(self.user and replied.author.id == self.user.id)
+            return None
+        if self.user and replied.author.id == self.user.id:
+            return replied
+        return None
 
-    async def _answer(self, query: str) -> str:
+    async def _answer(self, query: str, reply_context: str = "") -> str:
         chain_parts = []
 
         uid = _extract_uid(query)
@@ -329,7 +341,13 @@ class DiscordChatClient(discord.Client):
             chain_parts.append(_format_combined_top_miners())
 
         docs_context = all_docs_context() if _needs_docs(query) else ""
-        return await ask_codex(query, "\n\n".join(chain_parts), "", docs_context)
+        return await ask_codex(
+            query,
+            "\n\n".join(chain_parts),
+            "",
+            docs_context,
+            reply_context,
+        )
 
     async def _reply(self, message: discord.Message, answer: str) -> None:
         chunks = _split_discord_message(answer or "I don't have that information right now.")
